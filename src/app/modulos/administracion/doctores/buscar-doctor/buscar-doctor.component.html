@@ -1,0 +1,199 @@
+<!--https://medium.com/@yonem9/angular-c%C3%B3mo-narices-se-anidan-componentes-3f4a7124d751-->
+<div class="container" id="main-container">
+  <h3 class="align-items-center">Doctores registrados</h3>
+  <div class="d-flex justify-content-end">
+    <div class="formGroup">
+      <input type="text" class="form" name="filterDocPost" placeholder="Buscar Doctor" [(ngModel)]="filterDocPost">
+    </div>
+    <a class="btn" (click)="abrirModal(null, 'añadir')">
+      <img src="assets\agregar-usuario.png" height="40" width="40" />
+      Añadir Doctor
+    </a>
+  </div>
+  <div class="row">
+    <div *ngFor="let d of listadoDoctores | filter:filterDocPost" class="col-md-6 col-xl-3">
+      <div class="card m-b-30">
+        <div class="card-body row">
+          <div class="col-6">
+            <a href=""
+              ><img
+                src="assets\doctor.png"
+                alt="Logo"
+                class="img-fluid rounded-circle w-90"
+            /></a>
+          </div>
+          <div class="col-6 card-title align-self-center mb-0">
+            <h6>{{ d.nombre }} {{ d.apellido }}</h6>
+            <p class="m-0">{{ d.nombreEspecialidad }}</p>
+          </div>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">correo : {{ d.correo }}</li>
+          <li class="list-group-item">id : {{ d.id }}</li>
+        </ul>
+        <div class="card-body">
+          <div class="float-right btn-group btn-group-sm">
+            <a
+              href="#"
+              class="btn btn-primary tooltips"
+              data-placement="top"
+              data-toggle="tooltip"
+              data-original-title="Edit"
+              ><img
+                src="\assets\lapiz.png"
+                height="20"
+                width="20"
+                alt="Editar"
+              /><i class="fa fa-pencil"></i>
+            </a>
+            <a
+              routerLink="/reservas/citas-medicas/doctor/{{ d.id }}"
+              class="btn btn-secondary tooltips"
+              data-original-title="verCitas"
+              ><img
+                src="assets\cita.png"
+                alt="citasMedicas"
+                height="20"
+                width="20"
+            /></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="añadirDoctorModal"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="añadirDoctorLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="añadirDoctorLabel">Modal title</h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            FORM 
+            <form
+              [formGroup]="fgValidador"
+              method="POST"
+              (ngSubmit)="guardarDoctor()"
+            >
+              <div class="row">
+                <div class="col-md-6 mb-4">
+                  <div class="form-outline">
+                    <input
+                      type="text"
+                      formControlName="nombres"
+                      id="nombres"
+                      class="form-control form-control-lg"
+                    />
+                    <label class="form-label" for="nombres">Nombres</label>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                  <div class="form-outline">
+                    <input
+                      type="text"
+                      formControlName="apellidos"
+                      id="apellidos"
+                      class="form-control form-control-lg"
+                    />
+                    <label class="form-label" for="apellidos">Apellidos</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-4 d-flex align-items-center">
+                  <div class="form-outline datepicker w-100">
+                    <input
+                      type="email"
+                      formControlName="correo"
+                      class="form-control form-control-lg"
+                      id="correo"
+                    />
+                    <label for="correo" class="form-label">Correo</label>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                  <select
+                    formControlName="esp.nombre"
+                    class="form-select"
+                    id="listadoEspecialdades"
+                    aria-label="Default select example"
+                  >
+                    <option selected disabled>Especialidad...</option>
+                    <option
+                      *ngFor="let esp of listadoEspecialidades"
+                      value="{{ esp.nombre }}"
+                    >
+                      {{ esp.nombre }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  id="cerrarModalAñadirDoctor"
+                  data-bs-dismiss="modal"
+                >
+                  Close
+                </button>
+                <button
+                  [disabled]="!fgValidador.valid"
+                  type="submit"
+                  class="btn btn-primary"
+                >
+                  Understood
+                </button>
+              </div>
+            </form>
+
+           <!-- SI AL CREAR EL DOCTOR , ES SATISFACTORIO, SE CARGARA EL modal -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      *ngIf="
+        doctorGuardado.id != null && consultorioAsignadoGuardado === undefined
+      "
+    >
+      <app-reservar-consultorio
+        [doctorGuardado]="doctorGuardado"
+        (newItemEvent)="guardarConsultorio($event)"
+      ></app-reservar-consultorio>
+    </div>
+
+    <!--TODO: QUE SE MUESTRE ESE MODAL DE RESERVA EN UN MODAL AL MOMENTO DE FINALIZAR LA RESERVA, QUE SE CIERRE
+  AJUSTAR BACKEND Y FRONT PARA QUE LAS FECHAS TENGAN SENTIDO (NO MAOR  AFECHA DE HOY, NI FECHA FINAL MAYOR A INICIO)-->
+    <!--
+      <h6>{{doctorGuardado.nombre}} {{doctorGuardado.apellido}}</h6>
+    {{doctorGuardado.nombreEspecialidad}}
+</div>
+
+<div *ngIf="consultorioAsignadoGuardado !== undefined">
+<ul>
+  <li >{{consultorioAsignadoGuardado.nombre}}</li>
+  <li >{{consultorioAsignadoGuardado.idConsultorioAsignado}}</li>
+</ul>
+</div>
+-->
+
+    <!--Asignar consultorio, dentro del modal de añadir dpctor, meter 
+  el componente de reservar consultorio este abrira otro modal que mostrara los consultorios disponibles
+para que se pueda escoger.-->
+  </div>
+</div>

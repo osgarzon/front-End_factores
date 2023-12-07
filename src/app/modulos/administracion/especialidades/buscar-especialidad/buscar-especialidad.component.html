@@ -1,0 +1,22 @@
+<h3>Consultorios</h3>
+<div class="container">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Descripción</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let especialidad of listadoEspecialidades">
+        <td>{{especialidad.id}}</td>
+        <td>{{especialidad.nombre}}</td>
+        <td>{{especialidad.descripcion}}</td>
+        <a routerLink="/reservas/citas-medicas/especialidad/{{especialidad.nombre}}" class="btn btn-secondary tooltips"
+          data-original-title="verCitas"><img src="assets\cita.png" alt="citasMedicas" height="20" width="20" /></a>
+
+      </tr>
+    </tbody>
+  </table>
+</div>

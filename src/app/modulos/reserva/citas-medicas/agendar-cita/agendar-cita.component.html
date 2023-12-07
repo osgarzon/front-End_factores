@@ -1,0 +1,61 @@
+<div class="container" id = "main-container-reserva">
+  
+    <h3 class="align-items-center">Añadir cita medica</h3>
+
+
+    <form [formGroup]="fgValidador" (ngSubmit)="confirmarCitaMedica()">
+        <h4>Paciente:</h4>
+        <div class="row">            
+          <div class=" col-md-6 mb-4">
+            <div class="form-outline">
+              <input type="text" formControlName="cedula" id="cedula" class="form-control form-control-lg" />
+              <label class="form-label" for="cedula">Cedula</label>
+            </div>
+          </div> 
+          <div class="col-md-6 mb-4">
+            <select formControlName="esp.nombre" class="form-select" id="listadoEspecialdades" aria-label="Default select example">
+              <option selected disabled>Especialidad...</option>
+              <option *ngFor="let esp of listadoEspecialidades" value={{esp.nombre}}>{{esp.nombre}}</option>
+            </select>
+        </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <h6>Fecha Inicio</h6>
+                <div class="input-group">
+                    <input
+                      class="form-control"
+                      placeholder="yyyy-mm-dd"
+                      formControlName="fechaInicio"
+                      ngbDatepicker
+                      #d="ngbDatepicker"
+                    />
+                    <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d.toggle()" type="button"></button>
+                    <ngb-timepicker formControlName="horaInicio" class="form-control" name="horaInicio"></ngb-timepicker>
+                  </div>
+            </div>
+            <div class="col-12">
+                <h6>Fecha fin</h6>
+                <div class="input-group">
+                  <input
+                    class="form-control"
+                    placeholder="yyyy-mm-dd"
+                    formControlName="fechaFin"
+                    ngbDatepicker
+                    #d1="ngbDatepicker"
+                  />
+                  <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d1.toggle()" type="button"></button>
+                  <ngb-timepicker formControlName="horaFin" class="form-control" name="horaFin"></ngb-timepicker>
+                </div>
+              </div>
+        </div>
+        <div class="modal-footer">
+            <button [disabled]="!fgValidador.valid" type="submit" class="btn btn-primary">Agendar Cita Medica</button>
+          </div>
+
+    </form>
+
+
+    <!--DESPUES DE FAL EN CITA MEDICA, SI ES DIFERENTE A NULL SE ABRE UN MODAL CON LOS DETALLES DE LA CITA MEDICA-->
+</div>

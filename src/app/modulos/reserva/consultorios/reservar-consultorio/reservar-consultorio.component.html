@@ -1,0 +1,157 @@
+<div class="container" id = "main-container-reserva">
+  
+    <h3 class="align-items-center">Añadir reserva</h3>
+
+    <form [formGroup]="fgValidador" (ngSubmit)="buscarConsultoriosDisponibles()">
+      <div class="row">
+        <div class="col-12">
+          <h6>Fecha inicio</h6>
+          <div class="input-group">
+            <input
+              class="form-control"
+              placeholder="yyyy-mm-dd"
+              formControlName="fechaInicio"
+              ngbDatepicker
+              #d="ngbDatepicker"
+            />
+            <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d.toggle()" type="button"></button>
+            <ngb-timepicker formControlName="horaInicio" class="form-control" name="horaInicio"></ngb-timepicker>
+          </div>
+        </div>
+        <div class="col-12">
+          <h6>Fecha fin</h6>
+          <div class="input-group">
+            <input
+              class="form-control"
+              placeholder="yyyy-mm-dd"
+              formControlName="fechaFin"
+              ngbDatepicker
+              #d1="ngbDatepicker"
+            />
+            <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d1.toggle()" type="button"></button>
+            <ngb-timepicker formControlName="horaFin" class="form-control" name="horaFin"></ngb-timepicker>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button [disabled]="!fgValidador.valid" type="submit" class="btn btn-primary">Buscar disponibilidad</button>
+      </div>
+    </form>
+ 
+    <table class="table table-hover" *ngIf="listadoConsultoriosLibres.length > 0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Ciudad</th>
+          <th>Dirección</th>
+          <th>Numero</th>
+          <th>Descripcion</th>
+          <!-- Agrega aquí las columnas adicionales según tus necesidades -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let consultorio of listadoConsultoriosLibres">
+          <td>{{consultorio.id }}</td>
+          <td>{{consultorio.ciudad }}</td>
+          <td>{{consultorio.direccion }}</td>
+          <td>{{consultorio.numero }}</td>
+          <td>{{consultorio.descripcion }}</td>
+          <td>
+            <div class="d-flex justify-content-end">
+              <a class="btn" (click)="abrirModalReserva(consultorio, 'añadir')">
+                <img src="assets\agregar-usuario.png" height="40" width="40" />
+                Añadir reserva
+              </a>
+          </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+
+    <!--MODAL DE CREAR RESERVA-->
+    <div class="modal fade" id="añadirReservaModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="añadirDoctorLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="añadirReservaLabel">Confirmar reserva de consultorio</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form [formGroup]="fgValidadorReserva" method="POST" (ngSubmit)="confirmarReservaConsultorio()">
+                <h4>Doctor:</h4>
+              <div class="row">            
+                <div class="col-md-6 mb-4">
+                  <div class="form-outline">
+                    <input type="text" formControlName="idDoctor" id="idDoctor" class="form-control form-control-lg" />
+                    <label class="form-label" for="idDoctor">Id Doctor</label>
+                  </div>
+
+                </div>
+                <div class="col-md-6 mb-4">
+
+                  <div class="form-outline">
+                    <input type="text" formControlName="nombreCompleto" id="nombreCompleto" class="form-control form-control-lg" />
+                    <label class="form-label" for="nombreCompleto">Nombre Completo</label>
+                  </div>
+
+                </div>
+              </div>
+              <h4>Consultorio:</h4>
+              <div class="row">            
+                <div class="col-md-6 mb-4">
+                  <div class="form-outline">
+                    <input type="text" formControlName="idConsultorio" id="idConsultorio" class="form-control form-control-lg" />
+                    <label class="form-label" for="idConsultorio">idConsultorio</label>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                  <div class="form-outline">
+                    <input type="text" formControlName="direccion" id="direccion" class="form-control form-control-lg" />
+                    <label class="form-label" for="direccion">Direccion</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">            
+                <div class="col-md-6 mb-4">
+                  <div class="form-outline">
+                    <input type="text" formControlName="ciudad" id="ciudad" class="form-control form-control-lg" />
+                    <label class="form-label" for="ciudad">ciudad</label>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                  <div class="form-outline">
+                    <input type="text" formControlName="numConsultorio" id="numConsultorio" class="form-control form-control-lg" />
+                    <label class="form-label" for="numConsultorio">numConsultorio</label>
+                  </div>
+                </div>
+              </div>
+
+              <h4>Horario:</h4>
+              <div class="row">            
+                <div class="col-md-6 mb-4">
+                  <div class="form-outline">
+                    <input type="text" formControlName="fechaInicioConfirmada" id="fechaInicioConfirmada" #fechaInicioConfirmada class="form-control form-control-lg" />
+                    <label class="form-label" for="fechaInicioConfirmada">fechaInicio</label>
+                  </div>
+
+                </div>
+                <div class="col-md-6 mb-4">
+                  <div class="form-outline">
+                    <input type="text" formControlName="fechaFinConfirmada" id="fechaFinConfirmada" class="form-control form-control-lg" />
+                    <label class="form-label" for="fechaFinConfirmada">fechaFin</label>
+                  </div>
+                </div>
+              </div>
+                <div class="modal-footer">
+                  <button  type="button" class="btn btn-secondary" id="cerrarModalConfirmarReserva" data-bs-dismiss="modal">Close</button>
+                  <button [disabled] = "!fgValidador.valid"  type="submit" class="btn btn-primary"
+                  (click)="addNewItem()">Guardar</button>
+              </div> 
+            </form>
+            </div>
+          </div>
+        </div>
+      </div> 
+    
+</div>

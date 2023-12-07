@@ -1,0 +1,48 @@
+<div class="container">
+  <h3 class="align-items-center">Pacientes registrados</h3>
+  <div class="d-flex justify-content-end">
+    <div class="formGroup">
+      <input type="text" class="form" name="filterPost" placeholder="Buscar Paciente" [(ngModel)]="filterPost">
+    </div>
+    <a routerLink="/administracion/crear-paciente" class="ml-auto">
+      <button class="btn">
+        <img src="assets\agregar-usuario.png" height="40" width="40" />
+        Añadir paciente
+      </button>
+    </a>
+  </div>
+  <div class="row">
+    <div *ngFor="let p of listadoRegistros | filter:filterPost" class="col-md-6 col-xl-3">
+      <div class="card m-b-30">
+        <div class="card-body row">
+          <div class="col-6">
+            <a href=""><img src="assets\LogoPaciente.png" alt="Logo"
+                class="img-fluid rounded-circle w-90"></a>
+          </div>
+          <div class="col-6 card-title align-self-center mb-0">
+            <h6>{{p.nombre}} {{p.apellido}}</h6>
+            <p class="m-0">Fecha nacimiento: {{p.fechaNacimiento}}</p>
+            <p class="m-0">{{p.edad}} años</p>
+          </div>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Cedula : {{p.cedula}}</li>
+          <li class="list-group-item">Telefono : {{p.telefono}}</li>
+          <li class="list-group-item">Genero : {{p.genero}}</li>
+          <li class="list-group-item">EPS : {{p.eps}}</li>
+          <li class="list-group-item">Id : {{p.id}}</li>
+        </ul>
+        <div class="card-body">
+          <div class="float-right btn-group btn-group-sm">
+            <a routerLink="/administracion/pacientes/{{p.id}}" class="btn btn-primary tooltips"
+              data-original-title="Edit"><img src="\assets\lapiz.png" height="20" width="20" alt="Editar"> </a>
+            <a routerLink="/administracion/pacientes/eliminar/{{p.id}}" class="btn btn-secondary tooltips"
+              data-original-title="Delete"><img src="assets\basura.png" alt="Eliminar" height="20" width="20" /></a>
+            <a routerLink="/reservas/citas-medicas/paciente/{{p.id}}" class="btn btn-secondary tooltips"
+              data-original-title="verCitas"><img src="assets\cita.png" alt="citasMedicas" height="20" width="20" /></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
